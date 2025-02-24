@@ -1,0 +1,74 @@
+name: Generate Template
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+  workflow_dispatch:
+
+jobs:
+  template:
+    name: Template generation
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: |
+          pip install invoke
+          invoke requirements
+          pip list
+
+      - name: Execute template
+        run: |
+          invoke template
+
+      - name: Install conda
+        uses: conda-incubator/setup-miniconda@v3
+        with:
+          auto-activate-base: true
+          activate-environment: ""
+
+      - name: List all project commands
+        run: |
+          cd repo_name
+          invoke --list
+
+      - name: Run project commands
+        run: |
+          cd repo_name
+          invoke create-environment
+          invoke requirements
+          invoke dev-requirements
+        env:
+          TERM: xterm
+
+      - name: Run project commands
+        run: |
+          cd repo_name
+          invoke preprocess-data
+          invoke train
+          invoke test
+        env:
+          TERM: xterm
+
+      - name: Build documentation
+        run: |
+          cd repo_name
+          invoke build-docs
+        env:
+          TERM: xterm
+
+      - name: Build dockerfiles
+        run: |
+          cd repo_name
+          invoke docker-build
+        env:
+          TERM: xterm
