@@ -15,7 +15,7 @@ gh repo create <repo_name> --public --confirm
 Afterwards on your local machine run
 
 ```bash
-cookiecutter https://github.com/SkafteNicki/mlops_template
+cookiecutter my_packages/template_mlops/README.md
 ```
 
  Note that when asked for the project name, you should input
