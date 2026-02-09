@@ -16,6 +16,7 @@ Afterwards on your local machine run
 
 ```bash
 cookiecutter my_packages/template_mlops/README.md
+cookiecutter /Users/kaaso/Documents/coding/code/template_mlop
 ```
 
  Note that when asked for the project name, you should input
